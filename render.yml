@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: bloggen-server
+    runtime: node
+    rootDir: Server
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeployTrigger: commit
+    envVars:
+      - key: CLIENT_URL
+        value: https://bloggen-7d6l.onrender.com
+
+  - type: web
+    name: bloggen-client
+    runtime: static
+    rootDir: Client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    autoDeployTrigger: commit
+    envVars:
+      - key: VITE_API_URL
+        value: https://bloggen-x8q6.onrender.com/api
+      - key: VITE_BASE_URL
+        value: https://bloggen-x8q6.onrender.com

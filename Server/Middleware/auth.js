@@ -1,13 +1,21 @@
 import jwt from 'jsonwebtoken';
 
 const auth = (req, res, next) => {
-    const token = req.headers.authorization;
+    const authHeader = req.headers.authorization || '';
+    const token = authHeader.startsWith('Bearer ')
+        ? authHeader.slice(7)
+        : authHeader;
+
+    if (!token) {
+        return res.status(401).json({ success: false, message: 'Unauthorized access' });
+    }
+
     try {
         jwt.verify(token, process.env.JWT_SECRET);
         next();
     }
     catch (error) {
-        return res.status(401).json({ message: 'Unauthorized access' });
+        return res.status(401).json({ success: false, message: 'Unauthorized access' });
     }
 }
 export default auth;
