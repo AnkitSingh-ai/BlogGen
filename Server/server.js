@@ -2,20 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import connectDB from './configs/db.js'    ;
+import  adminRouter  from './Routes/adminRoutes.js';
 import blogRouter from './Routes/blogRoutes.js';
-import userRouter from './Routes/userRoutes.js';
-import userBlogRouter from './Routes/userBlogRoutes.js';
 
 const app = express();
-
-// Connect to database
-try {
-  await connectDB();
-  console.log('Database connection initialized');
-} catch (error) {
-  console.error('Failed to start server - database connection error');
-  process.exit(1);
-}
+await connectDB();
 
 // Middleware
 app.use(cors());
@@ -26,13 +17,12 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.send('Welcome to the server!');
 });
+app.use('/api/admin', adminRouter);
 app.use('/api/blog', blogRouter);
-app.use('/api/user', userRouter);
-app.use('/api/user-blog', userBlogRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
 
 // Export the app for testing or further configuration
