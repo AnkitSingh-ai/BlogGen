@@ -23,7 +23,7 @@ function Blog() {
 
 const fetchComments = async () => {
   try {
-    const { data } = await axios.get('/api/admin/comments');
+    const { data } = await axios.get(`/api/blog/comments/${id}`);
     if (data.success) {
       setComments(Array.isArray(data.comments) ? data.comments : []);
     } else {
@@ -55,7 +55,7 @@ const fetchComments = async () => {
       content,
     });
     if (data.success) {
-      toast.success('Comment added!');
+      toast.success('Comment submitted for approval!');
       setName('');
       setContent('');
       fetchComments(); // Refresh the comments list

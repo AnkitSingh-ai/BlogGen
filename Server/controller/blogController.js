@@ -63,7 +63,7 @@ export const getAllBlogs = async (req, res) => {
 export const getBlogById = async (req, res) => {
   try {
     const blogId = req.params.id;
-    const blog = await Blog.findById(blogId);
+    const blog = await Blog.findOne({ _id: blogId, isPublished: true });
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Blog not found' });
     }
@@ -126,8 +126,14 @@ export const addComment = async (req, res) => {
 
 export const getBlogComments = async (req, res) => {
   try {
+    const blogId = req.params.blogId || req.body.blog;
+    const query = { isApproved: true };
 
-    const comments = await Comment.find().populate('blog').sort({ createdAt: -1 });
+    if (blogId) {
+      query.blog = blogId;
+    }
+
+    const comments = await Comment.find(query).sort({ createdAt: -1 });
     res.json({ success: true, comments });
   } catch (error) {
     console.error(error);
