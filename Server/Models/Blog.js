@@ -20,6 +20,15 @@ const blogSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false, // Allow null for existing blogs
+  },
+  authorName: {
+    type: String,
+    required: false,
+  },
 }, {
   timestamps: true,
 });

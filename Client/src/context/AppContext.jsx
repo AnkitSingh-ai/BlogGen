@@ -12,6 +12,7 @@ export const AppProvider = ({children})=>{
 
     const navigate = useNavigate();
     const [token ,setToken]  = useState(null)
+    const [user, setUser] = useState(null)
     const [blog , setBlogs] = useState(null)
     const [input ,setInput] = useState("")
 
@@ -19,7 +20,7 @@ export const AppProvider = ({children})=>{
     
     const fetchBlogs = async ()=>{
         try {
-            const {data} = await axios.get('/api/blog/all');
+            const {data} = await axios.get('/api/user-blog/published');
             data.success ? setBlogs(data.blogs): toast.error(data.message)
         }catch(error){
             toast.error(error.message)
@@ -27,26 +28,35 @@ export const AppProvider = ({children})=>{
     }
    useEffect(() => {
     const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
+    
     if (storedToken) {
         setToken(storedToken);
         axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
     }
+    
+    if (storedUser) {
+        setUser(JSON.parse(storedUser));
+    }
+    
     fetchBlogs();
 }, []);
 
 const logout = async () => {
   try {
-    await axios.post('/api/admin/logout');
+    // No need to call logout endpoint since we're removing admin functionality
   } catch (e) {}
   localStorage.removeItem('token');
+  localStorage.removeItem('user');
   setToken(null);
+  setUser(null);
   delete axios.defaults.headers.common['Authorization'];
-  navigate('/admin/login');
+  navigate('/user');
 };
 
 
     const value = {
-        axios,navigate,token,blog,input ,setToken,setBlogs,setInput,logout
+        axios,navigate,token,user,blog,input ,setToken,setUser,setBlogs,setInput,logout,fetchBlogs
     }
 
 

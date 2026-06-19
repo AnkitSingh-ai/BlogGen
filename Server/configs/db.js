@@ -7,9 +7,12 @@ const connectDB = async () => {
     );
 
     await mongoose.connect(`${process.env.MONGO_URI}/BlogGen`);
+    console.log("✅ Database connected successfully");
+    return true;
 
   } catch (error) {
-    console.error(error.message);
+    console.error("❌ Database connection failed:", error.message);
+    process.exit(1);
   }
 }
 export default connectDB;

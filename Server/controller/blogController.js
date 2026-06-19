@@ -63,11 +63,17 @@ export const getAllBlogs = async (req, res) => {
 export const getBlogById = async (req, res) => {
   try {
     const blogId = req.params.id;
-    const blog = await Blog.findById(blogId);
+    const blog = await Blog.findById(blogId).populate('author', 'name email');
+    
     if (!blog) {
       return res.status(404).json({ success: false, message: 'Blog not found' });
     }
-    res.json({ success: true, blog });
+    
+    // Get comments for this specific blog
+    const comments = await Comment.find({ blog: blogId, isApproved: true })
+      .sort({ createdAt: -1 });
+    
+    res.json({ success: true, blog, comments });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
@@ -112,12 +118,13 @@ export const togglePublish = async (req, res) => {
 export const addComment = async (req, res) => {
   try {
     const {blog ,name ,content} = req.body;
-    await Comment.create({
+    const comment = await Comment.create({
       blog,
       name,
       content,
+      isApproved: true,
     });
-    res.json({ success: true, message: 'Comment added successfully' });
+    res.json({ success: true, message: 'Comment added successfully', comment });
   } catch (error) {
     console.error(error);
     res.json({ success: false, message: error.message });
@@ -126,8 +133,16 @@ export const addComment = async (req, res) => {
 
 export const getBlogComments = async (req, res) => {
   try {
-
-    const comments = await Comment.find().populate('blog').sort({ createdAt: -1 });
+    const { blogId } = req.body;
+    
+    if (!blogId) {
+      return res.status(400).json({ success: false, message: 'Blog ID is required' });
+    }
+    
+    const comments = await Comment.find({ blog: blogId })
+      .populate('blog', 'title')
+      .sort({ createdAt: -1 });
+    
     res.json({ success: true, comments });
   } catch (error) {
     console.error(error);
