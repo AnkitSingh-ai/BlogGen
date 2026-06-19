@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 function BlogCard({ blog }) {
-    const {title, description, image, _id, category} = blog
+    const {title = '', description = '', image, _id, category = 'General'} = blog
     const navigate = useNavigate()
   return (
     <div onClick={() => navigate(`/blog/${_id}`)} className='flex flex-col cursor-pointer bg-white shadow-md hover:shadow-lg transition-shadow duration-300 rounded-lg p-5'>

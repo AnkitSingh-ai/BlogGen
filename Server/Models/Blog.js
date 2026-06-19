@@ -16,6 +16,10 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required :true
   },
+  category: {
+    type: String,
+    default: "General",
+  },
   isPublished: {
     type: Boolean,
     default: false,

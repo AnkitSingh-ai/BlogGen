@@ -12,12 +12,15 @@ function BlogList() {
    const { blog, input } = useAppContext();
 
 const filteredBlogs = () => {
-  if (input === ' ') {
+  const searchTerm = (input || '').trim().toLowerCase();
+
+  if (!searchTerm) {
     return blog || [];
   }
+
   return (blog || []).filter((b) =>
-    b.title.toLowerCase().includes(input.toLowerCase()) ||
-    b.category.toLowerCase().includes(input.toLowerCase())
+    (b.title || '').toLowerCase().includes(searchTerm) ||
+    (b.category || '').toLowerCase().includes(searchTerm)
   );
 };
   return (
