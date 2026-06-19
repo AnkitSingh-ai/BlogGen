@@ -17,6 +17,6 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_BASE_URL
-        value: https://bloggen-server.onrender.com
+        value: https://bloggen-x8q6.onrender.com
       - key: VITE_API_URL
-        value: https://bloggen-server.onrender.com/api
+        value: https://bloggen-x8q6.onrender.com/api
