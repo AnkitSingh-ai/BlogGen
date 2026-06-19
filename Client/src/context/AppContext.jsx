@@ -4,7 +4,9 @@ import {useNavigate} from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 // For Vite, use import.meta.env.VITE_BASE_URL
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
+axios.defaults.baseURL =
+    import.meta.env.VITE_BASE_URL ||
+    (import.meta.env.DEV ? "http://localhost:3000" : "https://bloggen-x8q6.onrender.com");
 const AppContext = createContext();
 
 
