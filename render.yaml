@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: bloggen-server
+    runtime: node
+    rootDir: Server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URI
+        sync: false
+
+  - type: static
+    name: bloggen-client
+    runtime: static
+    rootDir: Client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_BASE_URL
+        value: https://bloggen-server.onrender.com
+      - key: VITE_API_URL
+        value: https://bloggen-server.onrender.com/api
